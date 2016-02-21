@@ -46,7 +46,7 @@ abs_get_pkgbuild() {
 		pkgbase=$(get_pkgbase $pkg $repo $pkgver)
 	fi
 	if [[ " ${REPOS[*]} " =~ " $repo " ]]; then
-		if [[ $repo = "community" ]] || [[ $repo = "community-testing" ]] || [[ $repo = "community-staging" ]]; then
+		if [[ $repo = "community" ]] || [[ $repo = "community-testing" ]] || [[ $repo = "community-staging" ]] || [[ $repo = "multilib" ]] || [[ $repo = "multilib-testing" ]] || [[ $repo = "multilib-staging" ]]; then
       cd $LOCALABSDIR/community/$pkgbase/trunk
 		else
       cd $LOCALABSDIR/packages/$pkgbase/trunk
