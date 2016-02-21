@@ -81,16 +81,16 @@ install_from_abs() {
 	echo
 	msg $(gettext 'Retrieving PKGBUILD and local sources...')
 	cwd=$PWD
-	init_build_dir "$YAOURTTMPDIR/abs-${pkginfo[1]}" || return 1
 	abs_get_pkgbuild ${pkginfo[0]}/${pkginfo[1]} ${pkginfo[3]} ||
-	  { cd "$cwd"; return 1; }
+	    { cd "$cwd"; return 1; }
+
+  echo "DEBUG: current dir: $PWD"
 
 	# Build, install/export
 	BUILD=$build_deps package_loop ${pkginfo[1]} 1 ||
 	  manage_error ${pkginfo[1]} ||
 	  { cd "$cwd"; return 1; }
 	cd "$cwd"
-	rm -rf "$YAOURTTMPDIR/abs-${pkginfo[1]}"
 }
 
 # Retrieve the list of packages existing in repos with pending upgrade
@@ -299,6 +299,7 @@ sysupgrade() {
 	# Upgrade packages from repos
 	if ((upgrade_needed)); then
 		(( UPGRADES > 1 )) && local _arg="-uu" || local _arg="-u"
+    echo "DEBUG: abs.sh: pacman -S upgrades"
 		su_pacman -S "${PACMAN_S_ARG[@]}" $_arg "${pkg_up[@]}" || return $?
 	fi
 
