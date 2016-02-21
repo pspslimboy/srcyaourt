@@ -288,6 +288,39 @@ yaourt_no_action() {
 }
 
 ###################################
+### SRCYAOURT FUNCTIONS         ###
+###################################
+
+# Pull latest ABS git repos
+srcyaourt_refresh() {
+	#echo -e "\e[34m::\e[0m \e[97mSynchronizing ABS GIT repositories...\e[0m"
+  msg $(gettext 'Synchronizing ABS GIT repositories...')
+	if [[ -d $LOCALABSDIR ]]; then
+		cd $LOCALABSDIR
+	else
+		echo "DEBUG: Creating $LOCALABSDIR"
+		mkdir $LOCALABSDIR
+		cd $LOCALABSDIR
+	fi
+		if [ ! -d "packages" ]; then
+			echo "DEBUG: Creating packages repo"
+			git clone git://projects.archlinux.org/svntogit/packages.git
+		fi
+		if [ ! -d "community" ]; then
+			echo "DEBUG: Creating community repo"
+			git clone git://projects.archlinux.org/svntogit/community.git
+		fi
+	cd $LOCALABSDIR/packages
+	  echo "DEBUG: Update package repo"
+    git clean -df
+		git pull
+	cd $LOCALABSDIR/community
+	  echo "DEBUG: Update community repo"
+    git clean -df
+		git pull
+}
+
+###################################
 ### MAIN PROGRAM                ###
 ###################################
 # Basic init and librairies
@@ -454,6 +487,7 @@ fi
 # or, if DETAILUPGRADE=0, with -Syu*
 if [[ $MAJOR = "sync" ]] && ((REFRESH)); then
 	((!PRINT && !SYSUPGRADE)) && pacman_refresh $REFRESH
+	srcyaourt_refresh
 fi
 
 # Action
