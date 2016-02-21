@@ -410,9 +410,15 @@ sync_packages() {
 	done
 	if [[ $bin_pkgs ]]; then
 		if [[ $SP_ARG ]]; then
-			su_pacman -S --asdeps --needed "${PACMAN_S_ARG[@]}" "${bin_pkgs[@]}" || return 1
+      echo "DEBUG: abs.sh: SPARG bin_pkgs pacman"
+      echo "DEBUG: abs.sh: ${PACMAN_S_ARG[@]}, ${bin_pkgs[@]}"
+      echo "DEBUG: abs.sh: Going to try to reference yaourt inside yaourt... :S"
+      yaourt -Sbb --asdeps --needed "${PACMAN_S_ARG[@]}" "${bin_pkgs[@]}" || return 1
 		else
-			su_pacman -S "${PACMAN_S_ARG[@]}" "${bin_pkgs[@]}" || return 1
+      echo "DEBUG: abs.sh: bin_pkgs pacman"
+      echo "DEBUG: abs.sh: ${PACMAN_S_ARG[@]}, ${bin_pkgs[@]}"
+      echo "DEBUG: abs.sh: Going to try to reference yaourt inside yaourt... :S"
+      yaourt -Sbb "${PACMAN_S_ARG[@]}" "${bin_pkgs[@]}" || return 1
 		fi
 	fi
 	for _pkg in "${aur_pkgs[@]}"; do
